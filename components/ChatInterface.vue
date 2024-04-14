@@ -10,14 +10,14 @@
           class="border-none ring-0 w-full rounded-lg focus:outline-none focus:ring-0 resize-none"></textarea>
           
       </div>
-      <label id="selected_model"class="w-fit h-4 ml-6 mb-4 text-gray-400"></label>
+      <label id="selected_model" class="w-fit h-4 ml-6 mb-4 text-gray-400"></label>
       
       
       
 
       <div class="absolute bottom-0 right-0 p-3 flex flex-col gap-2">
 
-        <button id="reset_button" class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
+        <button id="reset_button" @click="reset" class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -27,7 +27,7 @@
 
         </button>
 
-        <button id="chat_button" class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
+        <button id="chat_button" @click="sendMessage" class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
@@ -38,7 +38,7 @@
           </svg>
 
         </button>
-        <button id="stop_button"
+        <button id="stop_button" 
                 class="hidden bg-red-500 hover:bg-red-400 text-white font-extralight p-2.5 rounded">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -55,3 +55,14 @@
     </div>
   </div>
 </template>
+
+<script setup>
+const sendMessage = (event) => {
+  const buttonId = event.target.id;
+  const buttonClasses = event.target.className;
+  
+  console.log('Button ID:', buttonId);
+  console.log('Button Classes:', buttonClasses);
+  // Add your button click logic here
+};
+</script>
