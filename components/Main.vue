@@ -1,0 +1,9 @@
+<template>
+    <main id="main">
+        <div id="chat_messages" class="ml-2 mr-2 mt-3 mb-2 md:ml-16 md:mr-16 md:mt-6 overflow-auto flex flex-col">
+
+        </div>
+    </main>
+</template>
+<script>
+</script>
