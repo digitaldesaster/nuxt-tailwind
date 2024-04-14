@@ -7,7 +7,7 @@
 
         <!-- Removed h-full class and kept rows="3" -->
 
-        <textarea id="chat_input" placeholder="Type your message and press Command or Strg + Enter" rows="3"
+        <textarea v-model="newMessage" placeholder="Type your message and press Command or Strg + Enter" rows="3"
           class="border-none ring-0 w-full rounded-lg focus:outline-none focus:ring-0 resize-none"></textarea>
 
       </div>
@@ -18,8 +18,7 @@
 
       <div class="absolute bottom-0 right-0 p-3 flex flex-col gap-2">
 
-        <button id="reset_button" @click="reset"
-          class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
+        <button @click="reset" class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
@@ -30,8 +29,7 @@
 
         </button>
 
-        <button id="chat_button" @click="sendMessage"
-          class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
+        <button @click="sendMessage" class="bg-slate-800 hover:bg-slate-600 text-white font-extralight p-2.5 rounded">
 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
@@ -42,7 +40,7 @@
           </svg>
 
         </button>
-        <button id="stop_button" class="hidden bg-red-500 hover:bg-red-400 text-white font-extralight p-2.5 rounded">
+        <button class="hidden bg-red-500 hover:bg-red-400 text-white font-extralight p-2.5 rounded">
 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
@@ -60,34 +58,41 @@
 </template>
 
 <script setup>
+
+const messages = useState('messages', () => []);
+const newMessage = ref('');
+
+function addMessage(message) {
+  messages.value.push(message);
+  console.log("Current Messages:", JSON.stringify(messages.value)); // Logs the current state of messages
+}
+
+function clearMessages() {
+  messages.value = [];
+  console.log('Messages cleared'); // Logs when messages are cleared
+}
+
 const sendMessage = async () => {
   console.log('Send_Message clicked!');
+  if (newMessage.value.trim()) {
+    addMessage({ role: "user", content: newMessage.value });
+    newMessage.value = ''; // Clear the input after sending
+    const response = await $fetch('/api/chat', {
+      method: 'post',
+      body: {
+        "messages": messages.value
+      }
 
-  const response = await $fetch('/api/chat', {
-    method: 'post',
-    body: {
-      "messages": [
-        {
-          "role": "system",
-          "content": "Du bist ein hilfreicher Assistent"
-        },
-        {
-          "role": "user",
-          "content": "Wer war Ada Lovelace?!"
-        }
-      ]
-    }
+    })
 
-  })
-
-  const responseDiv = document.getElementById('response')
-  responseDiv.textContent = response // Or manipulate as needed
-
-  console.log(response)
-
+    addMessage({ role: "system", content: response });
+    
+  }
 };
 
+
 const reset = () => {
+  clearMessages();
   console.log('Reset clicked!');
 };
 </script>
